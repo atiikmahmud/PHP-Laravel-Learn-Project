@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Events\ProductCreated;
 use App\Jobs\SendProductCreatedEmail;
 use App\Models\Product;
 
-class ProductService 
+class ProductService
 {
     public function getAll()
     {
@@ -16,7 +17,7 @@ class ProductService
     {
         $product = Product::create($data);
 
-        SendProductCreatedEmail::dispatch($product);
+        event(new ProductCreated($product));
 
         return $product;
     }
