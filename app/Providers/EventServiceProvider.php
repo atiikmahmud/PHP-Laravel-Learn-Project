@@ -22,6 +22,15 @@ class EventServiceProvider extends ServiceProvider
         ProductCreated::class => [
             SendProductCreatedEmail::class,
         ],
+        \App\Events\ProductCreated::class => [
+            \App\Listeners\LogProductActivity::class,
+        ],
+        \App\Events\ProductUpdated::class => [
+            \App\Listeners\LogProductActivity::class,
+        ],
+        \App\Events\ProductDeleted::class => [
+            \App\Listeners\LogProductActivity::class,
+        ],
     ];
 
     /**

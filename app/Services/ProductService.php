@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Events\ProductCreated;
+use App\Events\ProductDeleted;
+use App\Events\ProductUpdated;
 use App\Jobs\SendProductCreatedEmail;
 use App\Models\Product;
 
@@ -24,11 +26,14 @@ class ProductService
 
     public function update(Product $product, array $data)
     {
-        return $product->update($data);
+        $product->update($data);
+        event(new ProductUpdated($product));
+        return $product;
     }
 
     public function delete(Product $product)
     {
+        event(new ProductDeleted($product));
         return $product->delete();
     }
 }

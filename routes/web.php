@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,4 +19,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('products', ProductController::class);
+
+
+Auth::routes();
+
+Route::middleware('auth')->group(function () {
+    Route::resource('products', ProductController::class);
+
+    Route::get('/activity-logs', function () {
+        $logs = \App\Models\ActivityLog::latest()->get();
+        return view('logs.index', compact('logs'));
+    });
+});
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
