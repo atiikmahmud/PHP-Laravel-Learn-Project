@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
@@ -26,13 +27,9 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $this->service->store($request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-        ]));
+        $this->service->store($request->validated());
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
@@ -42,13 +39,9 @@ class ProductController extends Controller
         return view('products.edit', compact('product'));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $this->service->update($product, $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-        ]));
+        $this->service->update($product, $request->validated());
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
