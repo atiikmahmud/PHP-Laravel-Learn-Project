@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\SendProductCreatedEmail;
 use App\Models\Product;
 
 class ProductService 
@@ -13,7 +14,11 @@ class ProductService
 
     public function store(array $data)
     {
-        return Product::create($data);
+        $product = Product::create($data);
+
+        SendProductCreatedEmail::dispatch($product);
+
+        return $product;
     }
 
     public function update(Product $product, array $data)
